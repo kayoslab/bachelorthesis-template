@@ -27,6 +27,11 @@
 \def\address#1{\gdef\@address{#1}}
 \def\firstexaminer#1{\gdef\@firstexaminer{#1}}
 \def\secondexaminer#1{\gdef\@secondexaminer{#1}}
+
+\def\major#1{\gdef\@major{#1}}
+\def\subject#1{\gdef\@subject{#1}}
+\def\faculty#1{\gdef\@faculty{#1}}
+
 \def\submitdate#1{\gdef\@submitdate{#1}}
 \def\period#1{\gdef\@period{#1}}
 
@@ -49,26 +54,32 @@
 
 \null
 \vfil
-\vskip 30pt
+\vskip 20pt
 
 	\noindent
 	\begin{minipage}[t]{\textwidth}
 	{\Large {\@title} \par}
 	%{\huge {#1} \par}
 	\end{minipage}
-  	\vskip 2em
+  	\vskip 1em
 	\noindent
 	\begin{minipage}[t]{\textwidth}
    		%{\large {#2}\par}
    		{\large {\@subtitle}\par}
  	\end{minipage}
- 	\vskip 2em % neu
+ 	\vskip 1em % neu
  	\noindent
   	\begin{minipage}[t]{\textwidth}
 		%{\large {#5} \par}
-		{\large {\@author} \par}
+		{\large {Bachelorarbeit vorgelegt von \@author} \par}
  	\end{minipage}
- 	%\vskip 15em
+ 	\vskip 8em % neu
+ 	\noindent
+ 	\begin{minipage}[t]{\textwidth}
+ 	 %{\large {#5} \par}
+ 		{\large {Angefertigt im Studiengang \@major{} in \newline \@subject{} an der Fachhochschule Bielefeld, \newline Fachbereich  \@faculty} \par}
+ 	 \end{minipage}
+	 %\vskip 15em
  	\vskip 10em
  	\noindent
  	\begin{minipage}[t]{\textwidth}
