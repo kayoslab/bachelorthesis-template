@@ -19,7 +19,7 @@
 %%   Right brace   \}     Tilde         \~}
 %%
 \NeedsTeXFormat{LaTeX2e}[1995/12/01]
-\ProvidesClass{i-studis}[2005/09/23 v4.11
+\ProvidesClass{layout}[20016/11/09 v0.1
 ^^JSpringer Verlag global LaTeX document class for monographs]
 
 % Titelseite
@@ -58,50 +58,40 @@
 
 	\noindent
 	\begin{minipage}[t]{\textwidth}
-	{\Large {\@title} \par}
+	{\huge {\@title} \par}
 	%{\huge {#1} \par}
 	\end{minipage}
-  	\vskip 1em
+  	\vskip 0.5em
 	\noindent
 	\begin{minipage}[t]{\textwidth}
-   		%{\large {#2}\par}
-   		{\large {\@subtitle}\par}
+   		{\Large {\@subtitle}\par}
+ 	\end{minipage}
+ 	\vskip 10em % neu
+ 	\noindent
+  	\begin{minipage}[t]{\textwidth}
+		{\large {Bachelorarbeit vorgelegt von \@author} \par}
  	\end{minipage}
  	\vskip 1em % neu
  	\noindent
-  	\begin{minipage}[t]{\textwidth}
-		%{\large {#5} \par}
-		{\large {Bachelorarbeit vorgelegt von \@author} \par}
- 	\end{minipage}
- 	\vskip 8em % neu
- 	\noindent
  	\begin{minipage}[t]{\textwidth}
- 	 %{\large {#5} \par}
  		{\large {Angefertigt im Studiengang \@major{} in \newline \@subject{} an der Fachhochschule Bielefeld, \newline Fachbereich  \@faculty} \par}
  	 \end{minipage}
-	 %\vskip 15em
  	\vskip 10em
  	\noindent
  	\begin{minipage}[t]{\textwidth}
- 		%{\large {#3} \par}
  		{\large {\@period} \par}
   	\end{minipage}
   	\vskip 1em
   	\noindent
  	\begin{minipage}[t]{\textwidth}
- 		%{\large {#4} \par}
  		{\large {Erstpr\"{u}ferin oder Erstpr\"{u}fer: \@firstexaminer} \par}
 		{\large {Zweitpr\"{u}ferin oder Zweitpr\"{u}fer: \@secondexaminer} \par}
   	\end{minipage}
-  	%\vskip 3em
-
- 	% author
 
  	\vskip 3em
  	\noindent
  	\begin{minipage}[t]{\textwidth}
- 		%{\large {#6} \par}
- 		{\large {\@address ~\@submitdate} \par}
+ 		{\large {\@address{}, \@submitdate} \par}
  	\end{minipage}
 
 \vfil
