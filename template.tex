@@ -10,24 +10,10 @@
 
 \usepackage{makeidx}         	% Index
 \usepackage{multicol}        	% Zweispaltiger Index
-%\usepackage[bottom]{footmisc}	% Erzeugung von Fuﬂnoten
+\usepackage[bottom]{footmisc}	% Erzeugung von Fuﬂnoten
 
-%%-----------------------------------------------------
-%\newif\ifpdf
-%\ifx\pdfoutput\undefined
-%\pdffalse
-%\else
-%\pdfoutput=1
-%\pdftrue
-%\fi
-%%--------------------------------------------------------
-%\ifpdf
 \usepackage[pdftex]{graphicx}
 \usepackage[pdftex,plainpages=false]{hyperref}
-%\else
-%\usepackage{graphicx}
-%\usepackage[plainpages=false]{hyperref}
-%\fi
 
 %%-----------------------------------------------------
 \usepackage{color}				     % Farbverwaltung
@@ -41,7 +27,7 @@
 \lstset
 {
 	basicstyle=\scriptsize, 	% print whole listing small
-	keywordstyle=\color{blue}\bfseries,
+	keywordstyle=\color{fhcolor2}\bfseries,
 								% underlined bold black keywords
 	identifierstyle=, 			% nothing happens
 	commentstyle=\color{red}, 	% white comments
@@ -62,8 +48,12 @@
 \usepackage[a4paper]{geometry} % Andere Formatierung
 \usepackage{bibgerm}
 \usepackage{array}
-\usepackage[scaled=0.9]{helvet}
-\hyphenation{Ele-men-tar-ob-jek-te  ab-ge-tas-tet Aus-wer-tung House-holder-Matrix Le-ast-Squa-res-Al-go-ri-th-men} 		% Weitere Silbentrennung bei Bedarf angeben
+
+\usepackage{helvet}         % selects Helvetica as sans-serif font
+\usepackage{courier}        % selects Courier as typewriter font
+\usepackage{type1cm}        % activate if the above 3 fonts are  not available on your system
+\hyphenation{Ele-men-tar-ob-jek-te  ab-ge-tas-tet Aus-wer-tung House-holder-Matrix Le-ast-Squa-res-Al-go-ri-th-men} 
+% Weitere Silbentrennung bei Bedarf angeben
 \setlength{\textheight}{1.1\textheight}
 \pagestyle{myheadings} 			% Erzeugt selbstdefinierte Kopfzeile
 \makeindex 						% Index-Erstellung
@@ -92,14 +82,31 @@
   \mytitlepage
   \newpage
 \endgroup
+
+\cleardoublepage % if some contents comes before
+%\pagenumbering{Roman}
+
+
 %--------------------------------------------------------------------------
 \frontmatter 
 %--------------------------------------------------------------------------
+
+
+\input{chapters/Sperrklausel}
 \input{chapters/Vorwort}				% Vorwort (optional)
 \input{chapters/Kurzfassung} 			% Kurzfassung Deutsch/English
+
+%--------------------------------------------------------------------------
 \tableofcontents 						% Inhaltsverzeichnis
+\addcontentsline{toc}{chapter}{\contentsname}
+
 \listoffigures 							% Abbildungsverzeichnis (optional)
+\addcontentsline{toc}{chapter}{\listfigurename}
+
 \listoftables 							% Tabellenverzeichnis (optional)
+\addcontentsline{toc}{chapter}{\listtablename}
+
+
 %--------------------------------------------------------------------------
 \mainmatter                        		% Hauptteil (ab hier arab. Seitenzahlen)
 %--------------------------------------------------------------------------
@@ -109,18 +116,21 @@
 \input{chapters/Bausteine}
 \input{chapters/Beispiel}
 \input{chapters/ZusammenfassungAusblick}
-% ...
+
 %--------------------------------------------------------------------------
-\backmatter                        		% Anhang
-%-------------------------------------------------------------------------
-\bibliographystyle{geralpha}			% Literaturverzeichnis
-\bibliography{literature}     			% BibTeX-File literature.bib
-%--------------------------------------------------------------------------
-\printindex 							% Index (optional)
-%--------------------------------------------------------------------------
-\begin{appendix}						% Anh‰nge sind i.d.R. optional
-   \include{chapters/Glossar}			% Glossar   
+
+\begin{appendix}
+	%--------------------------------------------------------------------------
+   \backmatter                        		% Anhang
+   %-------------------------------------------------------------------------
+   \bibliographystyle{geralpha}			% Literaturverzeichnis
+   \bibliography{literature}     			% BibTeX-File literature.bib
+   
+   \printindex 							% Index (optional)
+   
+   \include{chapters/Glossar} % Glossar   
    \include{chapters/Selbststaendigkeitserklaerung}	% Selbstst‰ndigkeitserkl‰rung
+
 \end{appendix}
 
 \end{document}

@@ -1,3 +1,4 @@
+
 % SVMONO DOCUMENT CLASS -- version 4.11 (23-Sep-05)
 % Springer Verlag global LaTeX2e support for monographs
 %%
@@ -46,10 +47,10 @@
 		%\end{figure}
 
 		\vspace{-0.25cm}
-		\definecolor{fhblau1}{cmyk}{0.42, 0.04, 0.09, 0}
-		\definecolor{fhblau2}{cmyk}{0.78, 0.24, 0.14, 0}
+		\definecolor{fhcolor1}{cmyk}{0.42, 0.04, 0.09, 0}
+		\definecolor{fhcolor2}{cmyk}{0.78, 0.24, 0.14, 0}
 		\noindent
-		\color{fhblau2} \rule{1\textwidth}{0.7mm}
+		\color{fhcolor2} \rule{1\textwidth}{0.7mm}
 		\color{black}
 
 \null
@@ -436,14 +437,27 @@ passing it to article class \MessageBreak
 \@addtoreset{footnote}{chapter}
 
 \newif\if@mainmatter \@mainmattertrue
-\newcommand\frontmatter{\startnewpage
-            \@mainmatterfalse\pagenumbering{Roman}
-            \setcounter{page}{2}}
+\newcommand\frontmatter{
+			\startnewpage
+            \@mainmatterfalse
+            \newcounter{savepage}
+			\setcounter{page}{0}
+			\pagenumbering{Roman}
+            }
 %
-\newcommand\mainmatter{\clearemptydoublepage
-       \@mainmattertrue\pagenumbering{arabic}}
+\newcommand\mainmatter{
+		\clearemptydoublepage
+		\@mainmattertrue
+		\setcounter{savepage}{\arabic{page}}
+		\pagenumbering{arabic}
+		\setcounter{chapter}{0}
+		}
 %
-\newcommand\backmatter{\clearemptydoublepage\@mainmatterfalse}
+\newcommand\backmatter{
+		\clearemptydoublepage
+		\@mainmatterfalse
+		\setcounter{page}{\thesavepage}
+	}
 
 \def\@chapapp{\chaptername}
 
@@ -470,80 +484,93 @@ passing it to article class \MessageBreak
     \box0\par
     \global\let\chapst@rthook=\undefined}}
 
-\newcommand\chapter{\startnewpage
-                    \@ifundefined{thispagecropped}{}{\thispagecropped}
-                    \thispagestyle{empty}%
-                    \global\@topnum\z@
-                    \@afterindentfalse
-                    \secdef\@chapter\@schapter}
+\newcommand\chapter{
+			\startnewpage
+			\@ifundefined{thispagecropped}{}{\thispagecropped}
+			\thispagestyle{empty}
+			\global\@topnum\z@
+			\@afterindentfalse
+			\secdef\@chapter\@schapter
+}
 
-\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
-                       \refstepcounter{chapter}%
-                       \if@mainmatter
-                         \typeout{\@chapapp\space\thechapter.}%
-                         \addcontentsline{toc}{chapter}{\protect
-                                  \numberline{\thechapter\thechapterend}#1}%
-                       \else
-                         \addcontentsline{toc}{chapter}{#1}%
-                       \fi
-                    \else
-                      \addcontentsline{toc}{chapter}{#1}%
-                    \fi
-                    \chaptermark{#1}%
-                    \addtocontents{lof}{\protect\addvspace{10\p@}}%
-                    \addtocontents{lot}{\protect\addvspace{10\p@}}%
-                    \if@twocolumn
-                      \@topnewpage[\@makechapterhead{#2}]%
-                    \else
-                      \@makechapterhead{#2}%
-                      \@afterheading
-                    \fi}
+\def\@chapter[#1]#2{
+		\ifnum \c@secnumdepth >\m@ne
+				\refstepcounter{chapter}
+				\if@mainmatter
+						\typeout{
+								\@chapapp\space\thechapter.
+						}
+						\addcontentsline{toc}{chapter}{
+								\protect  \numberline{\thechapter\thechapterend}#1
+						}
+				\else
+						\addcontentsline{toc}{chapter}{#1}
+				\fi
+		\else
+				\addcontentsline{toc}{chapter}{#1}
+		\fi
+		\chaptermark{#1}
+		\addtocontents{lof}{\protect\addvspace{10\p@}}
+		\addtocontents{lot}{\protect\addvspace{10\p@}}
+		
+		\if@twocolumn
+				\@topnewpage[\@makechapterhead{#2}]
+		\else
+				\@makechapterhead{#2}
+				\@afterheading
+		\fi
+}
 
-\def\@schapter#1{\if@twocolumn
-                   \@topnewpage[\@makeschapterhead{#1}]%
-                 \else
-                   \@makeschapterhead{#1}%
-                   \@afterheading
-                 \fi}
+\def\@schapter#1{
+		\if@twocolumn
+				\@topnewpage[\@makeschapterhead{#1}]		
+		\else
+				\@makeschapterhead{#1}
+				\@afterheading
+		\fi
+}
 
 %%changes position and layout of numbered chapter headings
-\def\@makechapterhead#1{{\parindent\z@\raggedright\normalfont
-  \hyphenpenalty \@M
-  \interlinepenalty\@M
-  \chapsize\chapstyle
-  \chap@hangfrom{\thechapter\thechapterend\hskip\betweenumberspace}%!!!
-  \ignorespaces#1\par\nobreak
-  \processchapstarthook
-  \ifdim\pagetotal>157\p@
-     \vskip 11\p@
-  \else
-     \@tempdima=168\p@\advance\@tempdima by-\pagetotal
-     \vskip\@tempdima
-  \fi}}
+\def\@makechapterhead#1{{
+		\parindent\z@\raggedright\normalfont
+		\hyphenpenalty \@M
+		\interlinepenalty\@M
+		\chapsize\chapstyle
+		\if@mainmatter
+		    \chap@hangfrom{\thechapter\thechapterend\hskip\betweenumberspace}
+		  \else
+		    \schap@hangfrom
+		  \fi
+		
+		\ignorespaces#1\par\nobreak
+		\processchapstarthook
+		\ifdim\pagetotal>157\p@
+				\vskip 11\p@
+		\else
+				\@tempdima=168\p@\advance\@tempdima by-\pagetotal
+				\vskip\@tempdima
+		\fi
+}}
 
 %%changes position and layout of unnumbered chapter headings
-\def\@makeschapterhead#1{{\parindent \z@ \raggedright\normalfont
-  \hyphenpenalty \@M
-  \interlinepenalty\@M
-  \chapsize\chapstyle
-  \schap@hangfrom
-  \ignorespaces#1\par\nobreak
-  \processchapstarthook
-  \ifdim\pagetotal>157\p@
-     \vskip 11\p@
-  \else
-     \@tempdima=168\p@\advance\@tempdima by-\pagetotal
-     \vskip\@tempdima
-  \fi}}
+\def\@makeschapterhead#1{{
+		\parindent \z@ \raggedright\normalfont
+		\hyphenpenalty \@M
+		\interlinepenalty\@M
+		\chapsize\chapstyle
+		\schap@hangfrom
+		
+		\ignorespaces#1\par\nobreak
+		\processchapstarthook
+		\ifdim\pagetotal>157\p@
+				\vskip 11\p@
+		\else
+				\@tempdima=168\p@\advance\@tempdima by-\pagetotal
+				\vskip\@tempdima
+		\fi
+}}
 
-% predefined unnumbered headings
-% predefined unnumbered headings
-\newcommand{\preface}[1][\prefacename]{\chapter*{#1}\markboth{#1}{#1}}
-% kurzfassung
-\newcommand{\kurzfassung}[1][\kurzfassungname]{\chapter*{#1}\markboth{#1}{#1}}
-% kurzfassung_en
-\newcommand{\kurzfassungEN}[1][\kurzfassungENname]{\chapter*{#1}\markboth{#1}{#1}}
-\newcommand{\danksagung}[1][\danksagungname]{\chapter*{#1}\markboth{#1}{#1}}
+
 
 % measures and setting of sections
 \renewcommand\section{\@startsection{section}{1}{\z@}%
@@ -570,17 +597,24 @@ passing it to article class \MessageBreak
     {-5.388\p@ \@plus-4\p@ \@minus-4\p@}{-5\p@}{\normalfont\normalsize\itshape}}
 
 % Appendix
-\renewcommand\appendix{\par
-                \stepcounter{chapter}
-                \setcounter{chapter}{0}
-                \stepcounter{section}
-                \setcounter{section}{0}
-                \setcounter{equation}{0}
-                \setcounter{figure}{0}
-                \setcounter{table}{0}
-                \setcounter{footnote}{0}
-  \def\@chapapp{\appendixname}%
-  \renewcommand\thechapter{\@Alph\c@chapter}}
+%\renewcommand\appendix{\par
+%              \stepcounter{chapter}
+%              \setcounter{chapter}{0}
+%              \stepcounter{section}
+%              \setcounter{section}{0}
+%              \setcounter{equation}{0}
+%              \setcounter{figure}{0}
+%              \setcounter{table}{0}
+%              \setcounter{footnote}{0}
+%\def\@chapapp{\appendixname}
+%  \renewcommand\thechapter{\@Alph\c@chapter}}
+\let\origappendix\appendix % save the existing appendix command
+\renewcommand\appendix{
+		\clearpage
+		\pagenumbering{Roman}
+		\origappendix
+}
+
 
 %  definition of sections
 %  \hyphenpenalty and \raggedright added, so that there is no
@@ -588,7 +622,6 @@ passing it to article class \MessageBreak
 
 \def\runinsep{}
 \def\aftertext{\unskip\runinsep}
-%
 \def\thesection{\thechapter.\arabic{section}}
 \def\thesubsection{\thesection.\arabic{subsection}}
 \def\thesubsubsection{\thesubsection.\arabic{subsubsection}}
@@ -941,9 +974,9 @@ passing it to article class \MessageBreak
  \def\notename{Anmerkung}%
  \def\partname{Teil}%
  \def\prefacename{Vorwort}%
- \def\kurzfassungname{Kurzfassung} %�nderung von Hermann Schloss
- \def\kurzfassungENname{Abstract} %�nderung von Hermann Schloss
- \def\danksagungname{Danksagung} %�nderung von Hermann Schloss
+ \def\kurzfassungname{Kurzfassung} %Änderung von Hermann Schloss
+ \def\kurzfassungENname{Abstract} %Änderung von Hermann Schloss
+ \def\danksagungname{Danksagung} %Änderung von Hermann Schloss
  \def\proofname{Beweis}%
  \def\propertyname{Eigenschaft}%
 %\def\propositionname{Proposition}%
@@ -1190,17 +1223,18 @@ to\z@{\kern0.55\wd0\vrule\@height0.45\ht0\hss}\box0}}}}
 
 \renewcommand\listoffigures{%
     \chapter*{\listfigurename
-      \@mkboth{\listfigurename}{\listfigurename}}%
+      \@mkboth{\listfigurename}{\listfigurename}}
     \@starttoc{lof}%
     }
 
 \renewcommand\listoftables{%
-    \chapter*{\listtablename
-      \@mkboth{\listtablename}{\listtablename}}%
-    \@starttoc{lot}%
+    \chapter*{
+      \listtablename
+      \@mkboth{\listtablename}{\listtablename}}
+      \@starttoc{lot}%
     }
 
-\renewcommand\footnoterule{%
+\renewcommand\footnoterule{
   \kern-3\p@
   \hrule\@width 50\p@
   \kern2.6\p@}
